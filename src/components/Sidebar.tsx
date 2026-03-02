@@ -53,7 +53,7 @@ export default function Sidebar({ guideLinks = [], categories }: SidebarProps) {
   return (
     <aside className="flex h-full w-[260px] shrink-0 flex-col border-r border-neutral-700/50 bg-black scrollbar-hide">
       <nav
-        className="flex flex-1 flex-col gap-1.5 overflow-y-auto px-5 pb-4 pt-6 scrollbar-hide"
+        className="flex flex-1 flex-col gap-1.5 overflow-y-auto px-5 pb-4 pt-4 scrollbar-hide"
         role="navigation"
         aria-label="Documentation navigation"
       >
