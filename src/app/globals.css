@@ -1,26 +1,86 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-size: 17px;
+    line-height: 1.75;
+  }
+
+  ::selection {
+    background: rgba(255, 255, 255, 0.15);
+  }
+
+  /* Global dark scrollbar */
+  *::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  *::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 3px;
+  }
+  *::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.16);
+  }
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.08) transparent;
+  }
+
+  /* Hide scrollbar on sidebar */
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  .grid-pattern {
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+
+  .code-block {
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.7;
+    tab-size: 2;
+  }
+
+  /* Dark scrollbar for code blocks and overflow areas */
+  .dark-scrollbar::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  .dark-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .dark-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+  }
+  .dark-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.18);
+  }
+  .dark-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
+  }
 }

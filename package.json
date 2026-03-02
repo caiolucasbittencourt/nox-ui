@@ -1,7 +1,15 @@
 {
-  "name": "lumiui",
+  "name": "nox-ui",
   "version": "0.1.0",
   "private": true,
+  "description": "A copy-and-paste UI component library for React. Built with Tailwind CSS and Framer Motion.",
+  "author": "Caio Bittencourt",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/caiolucasbittencourt/nox-ui.git"
+  },
+  "homepage": "https://github.com/caiolucasbittencourt/nox-ui",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -9,6 +17,8 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "framer-motion": "^12.34.3",
+    "lucide-react": "^0.575.0",
     "next": "16.1.6",
     "react": "19.2.3",
     "react-dom": "19.2.3"

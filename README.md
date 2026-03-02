@@ -1,36 +1,119 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Nox UI
+
+A copy-and-paste UI component library for React. Built with Tailwind CSS and Framer Motion, focused on dark mode and modern aesthetics.
+
+[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![React](https://img.shields.io/badge/React-19+-61DAFB?logo=react&logoColor=white)](https://react.dev)
+[![Next.js](https://img.shields.io/badge/Next.js-15+-black?logo=next.js&logoColor=white)](https://nextjs.org)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-4+-38B2AC?logo=tailwind-css&logoColor=white)](https://tailwindcss.com)
+
+## Features
+
+- **Copy & Paste** — No npm install. Copy the component code directly into your project.
+- **Dark Mode First** — All components designed for dark interfaces.
+- **Animations** — Smooth Framer Motion transitions on every component.
+- **TypeScript** — Full typing on all props with autocomplete.
+- **Zero Config** — No themes, providers, or wrappers to set up.
+
+## Components
+
+| Category   | Components                                          |
+| ---------- | --------------------------------------------------- |
+| Buttons    | Aurora Button, Flux Toggle                          |
+| Accordions | Stack Reveal                                        |
+| Carousels  | Slide Drift                                         |
+| Countdown  | Flip Clock                                          |
+| Grids      | Mosaic Grid                                         |
+| Loaders    | Orbit Spinner                                       |
+| Navigation | Float Dock                                          |
+| Forms      | Gateway Form                                        |
+| Modals     | Spotlight Dialog, Alert Dialog                      |
+| Typography | Gradient Flow, Typewriter, Glitch Text, Blur Reveal |
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- React 19+
+- Tailwind CSS 4+
+- (Optional) Framer Motion for animated components
+
+### Installation
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/caiolucasbittencourt/nox-ui.git
+cd nox-ui
+```
+
+2. Install dependencies:
+
+```bash
+npm install
+```
+
+3. Start the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+4. Open [http://localhost:3000](http://localhost:3000) to see the documentation.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Using Components
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Browse to a component in the documentation
+2. Click "Code" to view the source
+3. Copy the code into your project (e.g., `components/ui/glow-button.tsx`)
+4. Import and use it:
 
-## Learn More
+```tsx
+import { GlowButton } from "@/components/ui/glow-button";
 
-To learn more about Next.js, take a look at the following resources:
+export default function Page() {
+  return <GlowButton>Get Started</GlowButton>;
+}
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Tech Stack
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- [Next.js 15](https://nextjs.org) — App Router with React Server Components
+- [React 19](https://react.dev) — Latest React features
+- [Tailwind CSS 4](https://tailwindcss.com) — Utility-first CSS
+- [Framer Motion](https://www.framer.com/motion/) — Animation library
+- [Lucide React](https://lucide.dev) — Icon library
+- [TypeScript](https://www.typescriptlang.org/) — Type safety
 
-## Deploy on Vercel
+## Project Structure
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```
+src/
+├── app/                    # Next.js App Router pages
+│   ├── docs/
+│   │   └── [slug]/        # Dynamic documentation pages
+│   └── layout.tsx
+├── components/            # Documentation site components
+│   ├── CodeBlock.tsx
+│   ├── ComponentViewer.tsx
+│   ├── Navbar.tsx
+│   ├── PropsTable.tsx
+│   └── Sidebar.tsx
+└── registry/              # Component registry
+    ├── components/        # All UI components
+    ├── guides.tsx         # Documentation guides
+    ├── index.tsx          # Registry exports
+    └── types.ts           # TypeScript types
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Contributing
+
+Contributions are welcome! Please read our [Contributing Guide](CONTRIBUTING.md) for details.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+Built with ❤️ by [Caio Bittencourt](https://github.com/caiolucasbittencourt)
