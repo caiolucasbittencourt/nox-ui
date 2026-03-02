@@ -1,5 +1,6 @@
 import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
+import AutoTableOfContents from "@/components/AutoTableOfContents";
 import { componentMap, sidebarCategories, guideEntries } from "@/registry";
 
 /* Sidebar guide links derived from guideEntries */
@@ -28,6 +29,10 @@ export default function DocsLayout({
             <div className="min-w-0 flex-1 pb-[72px] pt-9">{children}</div>
           </div>
         </main>
+
+        <div className="hidden w-[260px] shrink-0 border-l border-neutral-700/50 xl:block">
+          <AutoTableOfContents />
+        </div>
       </div>
     </div>
   );
