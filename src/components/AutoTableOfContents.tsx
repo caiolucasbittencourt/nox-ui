@@ -121,9 +121,11 @@ export default function AutoTableOfContents() {
   if (items.length === 0) return null;
 
   return (
-    <aside className="sticky top-0 h-fit pt-4 pl-5 pr-5">
-      <p className="text-[13px] font-medium text-neutral-400">On this page</p>
-      <nav className="mt-4 flex flex-col gap-0.5 border-l border-neutral-700/50">
+    <aside className="sticky top-0 h-fit pt-8 pl-5 pr-5">
+      <p className="text-xs font-medium text-neutral-500 uppercase tracking-wider">
+        On this page
+      </p>
+      <nav className="mt-4 flex flex-col gap-0.5 border-l border-neutral-800/60">
         {items.map((item) => {
           const isActive = activeId === item.id;
           return (
@@ -135,7 +137,7 @@ export default function AutoTableOfContents() {
                   el.scrollIntoView({ behavior: "smooth", block: "start" });
                 }
               }}
-              className={`cursor-pointer px-3 py-1.5 text-left text-[13px] transition-colors ${
+              className={`cursor-pointer px-3 py-1.5 text-left text-sm transition-colors ${
                 isActive
                   ? "-ml-px border-l border-white text-white"
                   : "text-neutral-500 hover:text-neutral-300"

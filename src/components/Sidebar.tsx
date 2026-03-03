@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { ChevronDown, BookOpen } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import { ChevronDown, Search } from "lucide-react";
 
 export interface SidebarItem {
   name: string;
@@ -22,18 +22,29 @@ export interface GuideLink {
   slug: string;
 }
 
+interface SearchItem {
+  label: string;
+  slug: string;
+}
+
 interface SidebarProps {
   guideLinks?: GuideLink[];
   categories: SidebarCategory[];
+  searchItems?: SearchItem[];
 }
 
-export default function Sidebar({ guideLinks = [], categories }: SidebarProps) {
+export default function Sidebar({
+  guideLinks = [],
+  categories,
+  searchItems = [],
+}: SidebarProps) {
   const pathname = usePathname();
+  const router = useRouter();
   const activeSlug = pathname.split("/").pop() || "introduction";
 
   const [openSections, setOpenSections] = useState<Record<string, boolean>>(
     () => {
-      const initial: Record<string, boolean> = { Guide: true };
+      const initial: Record<string, boolean> = {};
       // Auto-open the section containing the active component
       for (const category of categories) {
         if (category.items.some((item) => item.slug === activeSlug)) {
@@ -44,80 +55,177 @@ export default function Sidebar({ guideLinks = [], categories }: SidebarProps) {
     },
   );
 
+  // Search state
+  const [query, setQuery] = useState("");
+  const [searchOpen, setSearchOpen] = useState(false);
+  const searchRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const filtered = query.trim()
+    ? searchItems.filter((item) =>
+        item.label.toLowerCase().includes(query.toLowerCase()),
+      )
+    : [];
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (searchRef.current && !searchRef.current.contains(e.target as Node)) {
+        setSearchOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const tag = (e.target as HTMLElement)?.tagName;
+      if (
+        tag === "INPUT" ||
+        tag === "TEXTAREA" ||
+        (e.target as HTMLElement)?.isContentEditable
+      )
+        return;
+      if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault();
+        inputRef.current?.focus();
+      }
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
+  const handleNavigate = (slug: string) => {
+    router.push(`/docs/${slug}`);
+    setQuery("");
+    setSearchOpen(false);
+  };
+
   const toggle = (title: string) => {
     setOpenSections((prev) => ({ ...prev, [title]: !prev[title] }));
   };
 
-  const guiaOpen = openSections["Guide"] ?? true;
-
   return (
-    <aside className="flex h-full w-[260px] shrink-0 flex-col border-r border-neutral-700/50 bg-black scrollbar-hide">
+    <aside className="flex h-full w-[260px] shrink-0 flex-col border-r border-neutral-800/60 bg-black scrollbar-hide">
+      {/* Logo */}
+      <div className="flex items-center gap-2 px-4 py-4">
+        <Link
+          href="/docs/introduction"
+          className="hover:opacity-80 transition-opacity"
+        >
+          <span className="text-base font-semibold tracking-tight text-white">
+            nox<span className="text-neutral-500">/</span>ui
+          </span>
+        </Link>
+        <span className="rounded bg-neutral-800/80 px-1.5 py-0.5 text-[11px] font-medium text-neutral-500">
+          v0.1.0
+        </span>
+      </div>
+
+      {/* Search */}
+      <div ref={searchRef} className="relative px-3 pb-4">
+        <div className="flex items-center gap-2.5 rounded-lg border border-neutral-800/60 bg-neutral-900/50 px-3 py-2">
+          <Search className="h-4 w-4 text-neutral-500" aria-hidden="true" />
+          <input
+            ref={inputRef}
+            type="text"
+            value={query}
+            onChange={(e) => {
+              setQuery(e.target.value);
+              setSearchOpen(true);
+            }}
+            onFocus={() => query.trim() && setSearchOpen(true)}
+            placeholder="Search..."
+            aria-label="Search components"
+            className="w-full bg-transparent text-sm text-neutral-300 placeholder:text-neutral-600 outline-none"
+          />
+          <kbd className="hidden items-center gap-0.5 rounded border border-neutral-800 px-1.5 py-0.5 text-neutral-600 lg:inline-flex">
+            <span className="text-xs leading-none">⌘</span>
+            <span className="text-sm font-medium leading-none">K</span>
+          </kbd>
+        </div>
+
+        {searchOpen && filtered.length > 0 && (
+          <div
+            className="absolute left-3 right-3 top-full z-50 mt-1 max-h-64 overflow-y-auto rounded-lg border border-neutral-800/60 bg-neutral-900 shadow-2xl"
+            role="listbox"
+          >
+            {filtered.map((item) => (
+              <button
+                key={item.slug}
+                onClick={() => handleNavigate(item.slug)}
+                role="option"
+                aria-selected={false}
+                className="flex w-full cursor-pointer items-center px-3 py-2.5 text-left text-sm text-neutral-400 transition-colors hover:bg-neutral-800/50 hover:text-white"
+              >
+                {item.label}
+              </button>
+            ))}
+          </div>
+        )}
+
+        {searchOpen && query.trim() && filtered.length === 0 && (
+          <div className="absolute left-3 right-3 top-full z-50 mt-1 rounded-lg border border-neutral-800/60 bg-neutral-900 px-3 py-3 text-sm text-neutral-500 shadow-2xl">
+            No results found.
+          </div>
+        )}
+      </div>
+
       <nav
-        className="flex flex-1 flex-col gap-1.5 overflow-y-auto px-5 pb-4 pt-4 scrollbar-hide"
+        className="flex flex-1 flex-col gap-0.5 overflow-y-auto px-3 pb-4 scrollbar-hide"
         role="navigation"
         aria-label="Documentation navigation"
       >
-        {/* ── Guide section ── */}
+        {/* ── Guide links (soltos) ── */}
         {guideLinks.length > 0 && (
-          <div className="mb-1">
-            <button
-              onClick={() => toggle("Guide")}
-              aria-expanded={guiaOpen}
-              className="flex w-full cursor-pointer items-center gap-2 rounded-md px-2 py-3 text-[13px] font-medium text-neutral-300 transition-colors hover:text-white"
-            >
-              <span className="flex h-4 w-4 items-center justify-center text-neutral-500">
-                <BookOpen className="h-4 w-4" />
-              </span>
-              <span className="flex-1 text-left">Guide</span>
-              <ChevronDown
-                className={`h-3.5 w-3.5 text-neutral-600 transition-transform ${
-                  guiaOpen ? "" : "-rotate-90"
-                }`}
-              />
-            </button>
-
-            {guiaOpen && (
-              <div className="ml-3 flex flex-col gap-1 border-l border-neutral-700/50 pl-3 pt-0.5">
-                {guideLinks.map((link) => {
-                  const isActive = activeSlug === link.slug;
-                  return (
-                    <Link
-                      key={link.slug}
-                      href={`/docs/${link.slug}`}
-                      className={`flex items-center gap-2 rounded-md px-2 py-3 text-[13px] transition-colors ${
-                        isActive
-                          ? "bg-white/[0.06] text-white"
-                          : "text-neutral-500 hover:text-neutral-200"
-                      }`}
-                    >
-                      <span className="truncate">{link.name}</span>
-                    </Link>
-                  );
-                })}
-              </div>
-            )}
+          <div className="mb-2">
+            <div className="flex flex-col gap-0.5">
+              {guideLinks.map((link) => {
+                const isActive = activeSlug === link.slug;
+                return (
+                  <Link
+                    key={link.slug}
+                    href={`/docs/${link.slug}`}
+                    className={`flex items-center gap-2 rounded-md px-2 py-2 text-sm transition-colors ${
+                      isActive
+                        ? "bg-white/[0.06] text-white"
+                        : "text-neutral-400 hover:text-white hover:bg-neutral-800/30"
+                    }`}
+                  >
+                    <span className="truncate">{link.name}</span>
+                  </Link>
+                );
+              })}
+            </div>
 
             {/* Separator */}
-            <div className="mx-2 my-2 border-t border-neutral-700/50" />
+            <div className="my-3 border-t border-neutral-800/60" />
           </div>
         )}
+
+        {/* Section title */}
+        <p className="px-2 pb-2 text-xs font-medium text-neutral-500 uppercase tracking-wider">
+          Components
+        </p>
 
         {/* ── Component categories ── */}
         {categories.map((category) => {
           const isOpen = openSections[category.title] ?? false;
+          const itemCount = category.items.length;
 
           return (
-            <div key={category.title} className="mb-1">
+            <div key={category.title}>
               {/* Category header */}
               <button
                 onClick={() => toggle(category.title)}
                 aria-expanded={isOpen}
-                className="flex w-full cursor-pointer items-center gap-2 rounded-md px-2 py-3 text-[13px] font-medium text-neutral-300 transition-colors hover:text-white"
+                className="flex w-full cursor-pointer items-center gap-2 rounded-md px-2 py-2 text-sm text-neutral-400 transition-colors hover:bg-neutral-800/30 hover:text-white"
               >
                 <span className="flex h-4 w-4 items-center justify-center text-neutral-500">
                   {category.icon}
                 </span>
                 <span className="flex-1 text-left">{category.title}</span>
+                <span className="text-xs text-neutral-600">{itemCount}</span>
                 <ChevronDown
                   className={`h-3.5 w-3.5 text-neutral-600 transition-transform ${
                     isOpen ? "" : "-rotate-90"
@@ -127,20 +235,25 @@ export default function Sidebar({ guideLinks = [], categories }: SidebarProps) {
 
               {/* Items */}
               {isOpen && (
-                <div className="ml-3 flex flex-col gap-1 border-l border-neutral-700/50 pl-3 pt-0.5">
+                <div className="ml-3 flex flex-col gap-0.5 border-l border-neutral-800/60 pl-3 py-1">
                   {category.items.map((item) => {
                     const isActive = activeSlug === item.slug;
                     return (
                       <Link
                         key={item.slug}
                         href={`/docs/${item.slug}`}
-                        className={`flex items-center gap-2 rounded-md px-2 py-3 text-[13px] transition-colors ${
+                        className={`flex items-center gap-2 rounded-md px-2 py-1.5 text-sm transition-colors ${
                           isActive
                             ? "bg-white/[0.06] text-white"
                             : "text-neutral-500 hover:text-neutral-200"
                         }`}
                       >
                         <span className="truncate">{item.name}</span>
+                        {item.isNew && (
+                          <span className="rounded bg-emerald-500/20 px-1.5 py-0.5 text-[10px] font-medium text-emerald-400">
+                            NEW
+                          </span>
+                        )}
                       </Link>
                     );
                   })}
@@ -152,21 +265,39 @@ export default function Sidebar({ guideLinks = [], categories }: SidebarProps) {
       </nav>
 
       {/* Footer */}
-      <div className="shrink-0 border-t border-neutral-700/50 px-5 py-4">
-        <p className="text-[11px] leading-relaxed text-neutral-600">
-          Built by{" "}
+      <div className="shrink-0 border-t border-neutral-800/60 px-4 py-3">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-[11px] leading-relaxed text-neutral-600">
+              Built by{" "}
+              <a
+                href="https://github.com/caiolucasbittencourt"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="cursor-pointer text-neutral-400 transition-colors hover:text-white"
+              >
+                Caio Bittencourt
+              </a>
+            </p>
+            <p className="mt-0.5 text-[10px] text-neutral-700">
+              © {new Date().getFullYear()} · MIT License
+            </p>
+          </div>
           <a
-            href="https://github.com/caiolucasbittencourt"
+            href="https://github.com/caiolucasbittencourt/nox-ui"
             target="_blank"
             rel="noopener noreferrer"
-            className="cursor-pointer text-neutral-400 transition-colors hover:text-white"
+            className="flex items-center justify-center h-8 w-8 rounded-lg text-neutral-500 hover:text-white hover:bg-neutral-800/50 transition-colors"
+            aria-label="GitHub"
           >
-            Caio Bittencourt
+            <img
+              src="/github.svg"
+              alt=""
+              className="h-4 w-4"
+              aria-hidden="true"
+            />
           </a>
-        </p>
-        <p className="mt-0.5 text-[10px] text-neutral-700">
-          © {new Date().getFullYear()} · MIT License
-        </p>
+        </div>
       </div>
     </aside>
   );

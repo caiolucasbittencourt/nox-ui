@@ -1,6 +1,6 @@
-import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
-import AutoTableOfContents from "@/components/AutoTableOfContents";
+import ConditionalTableOfContents from "@/components/ConditionalTableOfContents";
+import Breadcrumb from "@/components/Breadcrumb";
 import { componentMap, sidebarCategories, guideEntries } from "@/registry";
 
 /* Sidebar guide links derived from guideEntries */
@@ -18,21 +18,24 @@ export default function DocsLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex h-screen flex-col overflow-hidden bg-black text-white">
-      <Navbar searchItems={searchItems} />
+    <div className="flex h-screen overflow-hidden bg-black text-white">
+      <Sidebar
+        guideLinks={guideLinks}
+        categories={sidebarCategories}
+        searchItems={searchItems}
+      />
 
-      <div className="flex min-h-0 flex-1">
-        <Sidebar guideLinks={guideLinks} categories={sidebarCategories} />
-
-        <main className="flex-1 overflow-y-auto">
-          <div className="px-16">
-            <div className="min-w-0 flex-1 pb-[72px] pt-9">{children}</div>
+      <main className="flex-1 overflow-y-auto">
+        <div className="px-12 lg:px-16">
+          <div className="min-w-0 flex-1 pb-[72px] pt-8">
+            <Breadcrumb />
+            {children}
           </div>
-        </main>
-
-        <div className="hidden w-[260px] shrink-0 border-l border-neutral-700/50 xl:block">
-          <AutoTableOfContents />
         </div>
+      </main>
+
+      <div className="hidden w-[220px] shrink-0 border-l border-neutral-800/60 xl:block">
+        <ConditionalTableOfContents />
       </div>
     </div>
   );
