@@ -64,7 +64,7 @@ function highlightTokens(text: string, rules: TokenRule[]): React.ReactNode {
       </span>
     ) : (
       <React.Fragment key={i}>{part.text}</React.Fragment>
-    ),
+    )
   );
 }
 
@@ -98,10 +98,10 @@ export default function CopyCommand({ command }: CopyCommandProps) {
       <button
         onClick={() => copy(command)}
         aria-label={copied ? "Copied" : "Copy command"}
-        className={`absolute right-3 top-3 flex cursor-pointer items-center gap-1.5 rounded-md px-2 py-1.5 text-[11px] font-medium opacity-0 transition-all group-hover:opacity-100 ${
+        className={`absolute top-3 right-3 flex cursor-pointer items-center gap-1.5 rounded-md px-2 py-1.5 text-[11px] font-medium opacity-0 transition-all group-hover:opacity-100 ${
           copied
             ? "text-emerald-400"
-            : "text-neutral-600 hover:text-neutral-300 hover:bg-white/[0.04]"
+            : "text-neutral-600 hover:bg-white/[0.04] hover:text-neutral-300"
         }`}
       >
         {copied ? <Check size={13} /> : <Copy size={13} />}

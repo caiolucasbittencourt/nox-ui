@@ -9,7 +9,7 @@ function SignupFormDemo() {
       <input
         type="email"
         placeholder="email@example.com"
-        className="w-full rounded-lg border border-neutral-800 bg-neutral-900 px-4 py-2.5 text-sm text-white placeholder:text-neutral-600 outline-none focus:border-neutral-600 transition-colors"
+        className="w-full rounded-lg border border-neutral-800 bg-neutral-900 px-4 py-2.5 text-sm text-white transition-colors outline-none placeholder:text-neutral-600 focus:border-neutral-600"
       />
       <button className="w-full rounded-lg bg-white px-4 py-2.5 text-sm font-medium text-black transition-all hover:bg-neutral-200 active:scale-[0.98]">
         Create account

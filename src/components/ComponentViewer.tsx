@@ -90,7 +90,7 @@ export default function ComponentViewer({
                 className={`flex cursor-pointer items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
                   copied
                     ? "text-emerald-400"
-                    : "text-neutral-600 hover:text-white hover:bg-white/[0.04]"
+                    : "text-neutral-600 hover:bg-white/[0.04] hover:text-white"
                 }`}
               >
                 {copied ? (
@@ -113,7 +113,7 @@ export default function ComponentViewer({
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.15 }}
-              className="flex min-h-[320px] items-center justify-center bg-black p-16 grid-pattern"
+              className="grid-pattern flex min-h-[320px] items-center justify-center bg-black p-16"
             >
               {children}
             </motion.div>

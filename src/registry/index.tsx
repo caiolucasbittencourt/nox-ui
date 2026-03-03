@@ -68,7 +68,7 @@ export const componentSlugs: string[] = [
 
 /* ── Lookup map by slug ── */
 export const componentMap: Record<string, ComponentEntry> = Object.fromEntries(
-  allComponents.filter((c) => c && c.slug).map((c) => [c.slug, c]),
+  allComponents.filter((c) => c && c.slug).map((c) => [c.slug, c])
 );
 
 /* ── Sidebar categories ── */

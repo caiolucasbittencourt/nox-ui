@@ -35,13 +35,13 @@ function Digit({ value, label }: { value: number; label: string }) {
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 20, opacity: 0 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="text-2xl font-semibold tabular-nums text-white"
+            className="text-2xl font-semibold text-white tabular-nums"
           >
             {display}
           </motion.span>
         </AnimatePresence>
       </div>
-      <span className="text-[11px] uppercase tracking-wider text-neutral-600">
+      <span className="text-[11px] tracking-wider text-neutral-600 uppercase">
         {label}
       </span>
     </div>
@@ -51,9 +51,7 @@ function Digit({ value, label }: { value: number; label: string }) {
 function CountdownDemo() {
   const [target] = useState(
     () =>
-      new Date(
-        Date.now() + 4 * 86400000 + 7 * 3600000 + 23 * 60000 + 45 * 1000,
-      ),
+      new Date(Date.now() + 4 * 86400000 + 7 * 3600000 + 23 * 60000 + 45 * 1000)
   );
   const { days, hours, minutes, seconds } = useCountdown(target);
 

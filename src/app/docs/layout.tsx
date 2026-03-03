@@ -27,7 +27,7 @@ export default function DocsLayout({
 
       <main className="flex-1 overflow-y-auto">
         <div className="px-12 lg:px-16">
-          <div className="min-w-0 flex-1 pb-[72px] pt-8">
+          <div className="min-w-0 flex-1 pt-8 pb-[72px]">
             <Breadcrumb />
             {children}
           </div>

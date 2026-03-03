@@ -52,7 +52,7 @@ export default function Sidebar({
         }
       }
       return initial;
-    },
+    }
   );
 
   // Search state
@@ -63,7 +63,7 @@ export default function Sidebar({
 
   const filtered = query.trim()
     ? searchItems.filter((item) =>
-        item.label.toLowerCase().includes(query.toLowerCase()),
+        item.label.toLowerCase().includes(query.toLowerCase())
       )
     : [];
 
@@ -106,12 +106,12 @@ export default function Sidebar({
   };
 
   return (
-    <aside className="flex h-full w-[260px] shrink-0 flex-col border-r border-neutral-800/60 bg-black scrollbar-hide">
+    <aside className="scrollbar-hide flex h-full w-[260px] shrink-0 flex-col border-r border-neutral-800/60 bg-black">
       {/* Logo */}
       <div className="flex items-center gap-2 px-4 py-4">
         <Link
           href="/docs/introduction"
-          className="hover:opacity-80 transition-opacity"
+          className="transition-opacity hover:opacity-80"
         >
           <span className="text-base font-semibold tracking-tight text-white">
             nox<span className="text-neutral-500">/</span>ui
@@ -137,17 +137,17 @@ export default function Sidebar({
             onFocus={() => query.trim() && setSearchOpen(true)}
             placeholder="Search..."
             aria-label="Search components"
-            className="w-full bg-transparent text-sm text-neutral-300 placeholder:text-neutral-600 outline-none"
+            className="w-full bg-transparent text-sm text-neutral-300 outline-none placeholder:text-neutral-600"
           />
           <kbd className="hidden items-center gap-0.5 rounded border border-neutral-800 px-1.5 py-0.5 text-neutral-600 lg:inline-flex">
             <span className="text-xs leading-none">⌘</span>
-            <span className="text-sm font-medium leading-none">K</span>
+            <span className="text-sm leading-none font-medium">K</span>
           </kbd>
         </div>
 
         {searchOpen && filtered.length > 0 && (
           <div
-            className="absolute left-3 right-3 top-full z-50 mt-1 max-h-64 overflow-y-auto rounded-lg border border-neutral-800/60 bg-neutral-900 shadow-2xl"
+            className="absolute top-full right-3 left-3 z-50 mt-1 max-h-64 overflow-y-auto rounded-lg border border-neutral-800/60 bg-neutral-900 shadow-2xl"
             role="listbox"
           >
             {filtered.map((item) => (
@@ -165,14 +165,14 @@ export default function Sidebar({
         )}
 
         {searchOpen && query.trim() && filtered.length === 0 && (
-          <div className="absolute left-3 right-3 top-full z-50 mt-1 rounded-lg border border-neutral-800/60 bg-neutral-900 px-3 py-3 text-sm text-neutral-500 shadow-2xl">
+          <div className="absolute top-full right-3 left-3 z-50 mt-1 rounded-lg border border-neutral-800/60 bg-neutral-900 px-3 py-3 text-sm text-neutral-500 shadow-2xl">
             No results found.
           </div>
         )}
       </div>
 
       <nav
-        className="flex flex-1 flex-col gap-0.5 overflow-y-auto px-3 pb-4 scrollbar-hide"
+        className="scrollbar-hide flex flex-1 flex-col gap-0.5 overflow-y-auto px-3 pb-4"
         role="navigation"
         aria-label="Documentation navigation"
       >
@@ -189,7 +189,7 @@ export default function Sidebar({
                     className={`flex items-center gap-2 rounded-md px-2 py-2 text-sm transition-colors ${
                       isActive
                         ? "bg-white/[0.06] text-white"
-                        : "text-neutral-400 hover:text-white hover:bg-neutral-800/30"
+                        : "text-neutral-400 hover:bg-neutral-800/30 hover:text-white"
                     }`}
                   >
                     <span className="truncate">{link.name}</span>
@@ -204,7 +204,7 @@ export default function Sidebar({
         )}
 
         {/* Section title */}
-        <p className="px-2 pb-2 text-xs font-medium text-neutral-500 uppercase tracking-wider">
+        <p className="px-2 pb-2 text-xs font-medium tracking-wider text-neutral-500 uppercase">
           Components
         </p>
 
@@ -235,7 +235,7 @@ export default function Sidebar({
 
               {/* Items */}
               {isOpen && (
-                <div className="ml-3 flex flex-col gap-0.5 border-l border-neutral-800/60 pl-3 py-1">
+                <div className="ml-3 flex flex-col gap-0.5 border-l border-neutral-800/60 py-1 pl-3">
                   {category.items.map((item) => {
                     const isActive = activeSlug === item.slug;
                     return (
@@ -287,7 +287,7 @@ export default function Sidebar({
             href="https://github.com/caiolucasbittencourt/nox-ui"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-center h-8 w-8 rounded-lg text-neutral-500 hover:text-white hover:bg-neutral-800/50 transition-colors"
+            className="flex h-8 w-8 items-center justify-center rounded-lg text-neutral-500 transition-colors hover:bg-neutral-800/50 hover:text-white"
             aria-label="GitHub"
           >
             <img

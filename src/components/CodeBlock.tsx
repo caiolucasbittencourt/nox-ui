@@ -34,23 +34,23 @@ export default function CodeBlock({
       <button
         onClick={() => copy(code)}
         aria-label={copied ? "Copied" : "Copy code"}
-        className={`absolute right-3 top-3 z-10 flex cursor-pointer items-center gap-1.5 rounded-md px-2 py-1.5 text-[11px] font-medium opacity-0 transition-all group-hover:opacity-100 ${
+        className={`absolute top-3 right-3 z-10 flex cursor-pointer items-center gap-1.5 rounded-md px-2 py-1.5 text-[11px] font-medium opacity-0 transition-all group-hover:opacity-100 ${
           copied
             ? "text-emerald-400"
-            : "text-neutral-600 hover:text-neutral-300 hover:bg-white/[0.04]"
+            : "text-neutral-600 hover:bg-white/[0.04] hover:text-neutral-300"
         }`}
       >
         {copied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
       </button>
 
       {/* Code */}
-      <div className="overflow-x-auto p-4 dark-scrollbar">
+      <div className="dark-scrollbar overflow-x-auto p-4">
         <pre className="code-block">
           <code>
             {lines.map((line, i) => (
               <div key={i} className="flex">
                 {showLineNumbers && (
-                  <span className="mr-6 inline-block w-5 select-none text-right text-neutral-700">
+                  <span className="mr-6 inline-block w-5 text-right text-neutral-700 select-none">
                     {i + 1}
                   </span>
                 )}
@@ -152,6 +152,6 @@ function highlightTokens(line: string, rules: TokenRule[]): React.ReactNode {
       </span>
     ) : (
       <React.Fragment key={i}>{part.text}</React.Fragment>
-    ),
+    )
   );
 }

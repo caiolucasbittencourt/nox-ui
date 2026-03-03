@@ -12,7 +12,7 @@ interface UseCopyToClipboardReturn {
 }
 
 export function useCopyToClipboard(
-  options: UseCopyToClipboardOptions = {},
+  options: UseCopyToClipboardOptions = {}
 ): UseCopyToClipboardReturn {
   const { timeout = 2000 } = options;
   const [copied, setCopied] = useState(false);
@@ -27,7 +27,7 @@ export function useCopyToClipboard(
         console.error("Failed to copy to clipboard:", error);
       }
     },
-    [timeout],
+    [timeout]
   );
 
   return { copied, copy };

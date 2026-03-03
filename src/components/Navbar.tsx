@@ -22,7 +22,7 @@ export default function Navbar({ searchItems = [] }: NavbarProps) {
 
   const filtered = query.trim()
     ? searchItems.filter((item) =>
-        item.label.toLowerCase().includes(query.toLowerCase()),
+        item.label.toLowerCase().includes(query.toLowerCase())
       )
     : [];
 
@@ -73,17 +73,17 @@ export default function Navbar({ searchItems = [] }: NavbarProps) {
         <div className="flex w-[260px] shrink-0 items-center gap-2.5 px-5">
           <Link
             href="/docs/introduction"
-            className="text-sm font-semibold tracking-wide text-white hover:opacity-80 transition-opacity"
+            className="text-sm font-semibold tracking-wide text-white transition-opacity hover:opacity-80"
           >
             Nox UI
           </Link>
-          <span className="text-[10px] font-medium leading-none text-neutral-400">
+          <span className="text-[10px] leading-none font-medium text-neutral-400">
             v0.1.0
           </span>
         </div>
 
         {/* Right area — aligned with main content */}
-        <div className="flex flex-1 items-center justify-end gap-5 pl-16 pr-5">
+        <div className="flex flex-1 items-center justify-end gap-5 pr-5 pl-16">
           {/* Search */}
           <div ref={ref} className="relative hidden w-full max-w-xs md:block">
             <div className="flex items-center gap-3 rounded-xl border border-neutral-700/50 bg-black px-4 py-2">
@@ -102,7 +102,7 @@ export default function Navbar({ searchItems = [] }: NavbarProps) {
                 onFocus={() => query.trim() && setOpen(true)}
                 placeholder="Search components..."
                 aria-label="Search components"
-                className="w-full bg-transparent text-[13px] text-neutral-300 placeholder:text-neutral-500 outline-none"
+                className="w-full bg-transparent text-[13px] text-neutral-300 outline-none placeholder:text-neutral-500"
               />
               <kbd className="hidden rounded border border-neutral-800/60 px-1.5 py-0.5 text-[10px] text-neutral-600 lg:inline-block">
                 /
@@ -111,7 +111,7 @@ export default function Navbar({ searchItems = [] }: NavbarProps) {
 
             {open && filtered.length > 0 && (
               <div
-                className="absolute left-0 right-0 top-full mt-1.5 max-h-64 overflow-y-auto rounded-xl border border-neutral-700/50 bg-black shadow-2xl"
+                className="absolute top-full right-0 left-0 mt-1.5 max-h-64 overflow-y-auto rounded-xl border border-neutral-700/50 bg-black shadow-2xl"
                 role="listbox"
               >
                 {filtered.map((item) => (
@@ -128,7 +128,7 @@ export default function Navbar({ searchItems = [] }: NavbarProps) {
             )}
 
             {open && query.trim() && filtered.length === 0 && (
-              <div className="absolute left-0 right-0 top-full mt-1.5 rounded-xl border border-neutral-700/50 bg-black px-4 py-4 text-[13px] text-neutral-600 shadow-2xl">
+              <div className="absolute top-full right-0 left-0 mt-1.5 rounded-xl border border-neutral-700/50 bg-black px-4 py-4 text-[13px] text-neutral-600 shadow-2xl">
                 No results found.
               </div>
             )}
