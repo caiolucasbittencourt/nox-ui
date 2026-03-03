@@ -4,7 +4,7 @@ A copy-and-paste UI component library for React. Built with Tailwind CSS and Fra
 
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![React](https://img.shields.io/badge/React-19+-61DAFB?logo=react&logoColor=white)](https://react.dev)
-[![Next.js](https://img.shields.io/badge/Next.js-15+-black?logo=next.js&logoColor=white)](https://nextjs.org)
+[![Next.js](https://img.shields.io/badge/Next.js-16+-black?logo=next.js&logoColor=white)](https://nextjs.org)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-4+-38B2AC?logo=tailwind-css&logoColor=white)](https://tailwindcss.com)
 
 ## Features
@@ -34,6 +34,7 @@ A copy-and-paste UI component library for React. Built with Tailwind CSS and Fra
 
 ### Prerequisites
 
+- Node.js 22+
 - React 19+
 - Tailwind CSS 4+
 - (Optional) Framer Motion for animated components
@@ -59,7 +60,20 @@ npm install
 npm run dev
 ```
 
-4. Open [http://localhost:3000](http://localhost:3000) to see the documentation.
+4. Open [http://localhost:3000](http://localhost:3000) to browse the components.
+
+### Available Scripts
+
+```bash
+npm run dev          # Start development server
+npm run build        # Build for production
+npm run lint         # Run ESLint
+npm run lint:fix     # Fix ESLint errors
+npm run format       # Format code with Prettier
+npm run format:check # Check code formatting
+npm run typecheck    # Run TypeScript type checking
+npm run check        # Run all checks (typecheck + lint + format)
+```
 
 ### Using Components
 
@@ -78,7 +92,7 @@ export default function Page() {
 
 ## Tech Stack
 
-- [Next.js 15](https://nextjs.org) — App Router with React Server Components
+- [Next.js 16](https://nextjs.org) — App Router with React Server Components
 - [React 19](https://react.dev) — Latest React features
 - [Tailwind CSS 4](https://tailwindcss.com) — Utility-first CSS
 - [Framer Motion](https://www.framer.com/motion/) — Animation library

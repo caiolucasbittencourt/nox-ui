@@ -39,7 +39,7 @@ export default function TableOfContents({ items }: TableOfContentsProps) {
         /* top offset accounts for navbar; bottom 0 means full viewport */
         rootMargin: "-60px 0px 0px 0px",
         threshold: 0,
-      },
+      }
     );
 
     for (const item of items) {

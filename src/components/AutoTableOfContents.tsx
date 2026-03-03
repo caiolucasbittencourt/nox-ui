@@ -121,8 +121,8 @@ export default function AutoTableOfContents() {
   if (items.length === 0) return null;
 
   return (
-    <aside className="sticky top-0 h-fit pt-8 pl-5 pr-5">
-      <p className="text-xs font-medium text-neutral-500 uppercase tracking-wider">
+    <aside className="sticky top-0 h-fit pt-8 pr-5 pl-5">
+      <p className="text-xs font-medium tracking-wider text-neutral-500 uppercase">
         On this page
       </p>
       <nav className="mt-4 flex flex-col gap-0.5 border-l border-neutral-800/60">

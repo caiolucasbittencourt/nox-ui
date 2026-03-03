@@ -10,7 +10,7 @@ export async function generateStaticParams() {
   const guideSlugsArray = Array.from(guideSlugs);
 
   const allSlugs = [...guideSlugsArray, ...componentSlugs].filter(
-    (slug): slug is string => typeof slug === "string" && slug.length > 0,
+    (slug): slug is string => typeof slug === "string" && slug.length > 0
   );
 
   return allSlugs.map((slug) => ({ slug }));

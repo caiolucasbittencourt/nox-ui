@@ -438,7 +438,7 @@ export default function Page() {
 export const guideEntries: GuideEntry[] = [introduction, installation];
 
 export const guideMap: Record<string, GuideEntry> = Object.fromEntries(
-  guideEntries.map((g) => [g.slug, g]),
+  guideEntries.map((g) => [g.slug, g])
 );
 
 export const guideSlugs = new Set(guideEntries.map((g) => g.slug));
