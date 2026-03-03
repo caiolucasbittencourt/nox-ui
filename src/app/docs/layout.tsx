@@ -1,15 +1,17 @@
 import Sidebar from "@/components/Sidebar";
-import ConditionalTableOfContents from "@/components/ConditionalTableOfContents";
+import AutoTableOfContents from "@/components/AutoTableOfContents";
 import Breadcrumb from "@/components/Breadcrumb";
-import { componentMap, sidebarCategories, guideEntries } from "@/registry";
+import { sidebarCategories, guideEntries } from "@/registry";
 
 /* Sidebar guide links derived from guideEntries */
 const guideLinks = guideEntries.map((g) => ({ name: g.title, slug: g.slug }));
 
-/* Build flat search items from guides + components */
+/* Build flat search items from guides + all sidebar category items */
 const searchItems = [
   ...guideEntries.map((g) => ({ label: g.title, slug: g.slug })),
-  ...Object.values(componentMap).map((c) => ({ label: c.title, slug: c.slug })),
+  ...sidebarCategories.flatMap((cat) =>
+    cat.items.map((item) => ({ label: item.name, slug: item.slug }))
+  ),
 ];
 
 export default function DocsLayout({
@@ -35,7 +37,7 @@ export default function DocsLayout({
       </main>
 
       <div className="hidden w-[220px] shrink-0 border-l border-neutral-800/60 xl:block">
-        <ConditionalTableOfContents />
+        <AutoTableOfContents />
       </div>
     </div>
   );

@@ -3,7 +3,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { ChevronDown, Search } from "lucide-react";
+import { ChevronDown, Search, X } from "lucide-react";
 
 export interface SidebarItem {
   name: string;
@@ -57,25 +57,15 @@ export default function Sidebar({
 
   // Search state
   const [query, setQuery] = useState("");
-  const [searchOpen, setSearchOpen] = useState(false);
-  const searchRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const filtered = query.trim()
+  const isSearching = query.trim().length > 0;
+
+  const filtered = isSearching
     ? searchItems.filter((item) =>
         item.label.toLowerCase().includes(query.toLowerCase())
       )
     : [];
-
-  useEffect(() => {
-    const handler = (e: MouseEvent) => {
-      if (searchRef.current && !searchRef.current.contains(e.target as Node)) {
-        setSearchOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handler);
-    return () => document.removeEventListener("mousedown", handler);
-  }, []);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -98,7 +88,11 @@ export default function Sidebar({
   const handleNavigate = (slug: string) => {
     router.push(`/docs/${slug}`);
     setQuery("");
-    setSearchOpen(false);
+  };
+
+  const clearSearch = () => {
+    setQuery("");
+    inputRef.current?.focus();
   };
 
   const toggle = (title: string) => {
@@ -123,52 +117,33 @@ export default function Sidebar({
       </div>
 
       {/* Search */}
-      <div ref={searchRef} className="relative px-3 pb-4">
+      <div className="px-3 pb-4">
         <div className="flex items-center gap-2.5 rounded-lg border border-neutral-800/60 bg-neutral-900/50 px-3 py-2">
           <Search className="h-4 w-4 text-neutral-500" aria-hidden="true" />
           <input
             ref={inputRef}
             type="text"
             value={query}
-            onChange={(e) => {
-              setQuery(e.target.value);
-              setSearchOpen(true);
-            }}
-            onFocus={() => query.trim() && setSearchOpen(true)}
+            onChange={(e) => setQuery(e.target.value)}
             placeholder="Search..."
             aria-label="Search components"
             className="w-full bg-transparent text-sm text-neutral-300 outline-none placeholder:text-neutral-600"
           />
-          <kbd className="hidden items-center gap-0.5 rounded border border-neutral-800 px-1.5 py-0.5 text-neutral-600 lg:inline-flex">
-            <span className="text-xs leading-none">⌘</span>
-            <span className="text-sm leading-none font-medium">K</span>
-          </kbd>
+          {isSearching ? (
+            <button
+              onClick={clearSearch}
+              className="text-neutral-500 transition-colors hover:text-neutral-300"
+              aria-label="Clear search"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          ) : (
+            <kbd className="hidden items-center gap-0.5 rounded border border-neutral-800 px-1.5 py-0.5 text-neutral-600 lg:inline-flex">
+              <span className="text-xs leading-none">⌘</span>
+              <span className="text-sm leading-none font-medium">K</span>
+            </kbd>
+          )}
         </div>
-
-        {searchOpen && filtered.length > 0 && (
-          <div
-            className="absolute top-full right-3 left-3 z-50 mt-1 max-h-64 overflow-y-auto rounded-lg border border-neutral-800/60 bg-neutral-900 shadow-2xl"
-            role="listbox"
-          >
-            {filtered.map((item) => (
-              <button
-                key={item.slug}
-                onClick={() => handleNavigate(item.slug)}
-                role="option"
-                aria-selected={false}
-                className="flex w-full cursor-pointer items-center px-3 py-2.5 text-left text-sm text-neutral-400 transition-colors hover:bg-neutral-800/50 hover:text-white"
-              >
-                {item.label}
-              </button>
-            ))}
-          </div>
-        )}
-
-        {searchOpen && query.trim() && filtered.length === 0 && (
-          <div className="absolute top-full right-3 left-3 z-50 mt-1 rounded-lg border border-neutral-800/60 bg-neutral-900 px-3 py-3 text-sm text-neutral-500 shadow-2xl">
-            No results found.
-          </div>
-        )}
       </div>
 
       <nav
@@ -176,92 +151,127 @@ export default function Sidebar({
         role="navigation"
         aria-label="Documentation navigation"
       >
-        {/* ── Guide links (soltos) ── */}
-        {guideLinks.length > 0 && (
-          <div className="mb-2">
-            <div className="flex flex-col gap-0.5">
-              {guideLinks.map((link) => {
-                const isActive = activeSlug === link.slug;
+        {/* ── Search Results ── */}
+        {isSearching ? (
+          <div className="flex flex-col gap-1">
+            <p className="px-2 pb-2 text-xs font-medium tracking-wider text-neutral-500 uppercase">
+              Results ({filtered.length})
+            </p>
+            {filtered.length > 0 ? (
+              filtered.map((item) => {
+                const isActive = activeSlug === item.slug;
                 return (
-                  <Link
-                    key={link.slug}
-                    href={`/docs/${link.slug}`}
-                    className={`flex items-center gap-2 rounded-md px-2 py-2 text-sm transition-colors ${
+                  <button
+                    key={item.slug}
+                    onClick={() => handleNavigate(item.slug)}
+                    className={`flex w-full cursor-pointer items-center rounded-md px-2 py-2 text-left text-sm transition-colors ${
                       isActive
                         ? "bg-white/[0.06] text-white"
                         : "text-neutral-400 hover:bg-neutral-800/30 hover:text-white"
                     }`}
                   >
-                    <span className="truncate">{link.name}</span>
-                  </Link>
+                    <span className="truncate">{item.label}</span>
+                  </button>
                 );
-              })}
-            </div>
-
-            {/* Separator */}
-            <div className="my-3 border-t border-neutral-800/60" />
+              })
+            ) : (
+              <p className="px-2 py-4 text-center text-sm text-neutral-600">
+                No results found for "{query}"
+              </p>
+            )}
           </div>
-        )}
-
-        {/* Section title */}
-        <p className="px-2 pb-2 text-xs font-medium tracking-wider text-neutral-500 uppercase">
-          Components
-        </p>
-
-        {/* ── Component categories ── */}
-        {categories.map((category) => {
-          const isOpen = openSections[category.title] ?? false;
-          const itemCount = category.items.length;
-
-          return (
-            <div key={category.title}>
-              {/* Category header */}
-              <button
-                onClick={() => toggle(category.title)}
-                aria-expanded={isOpen}
-                className="flex w-full cursor-pointer items-center gap-2 rounded-md px-2 py-2 text-sm text-neutral-400 transition-colors hover:bg-neutral-800/30 hover:text-white"
-              >
-                <span className="flex h-4 w-4 items-center justify-center text-neutral-500">
-                  {category.icon}
-                </span>
-                <span className="flex-1 text-left">{category.title}</span>
-                <span className="text-xs text-neutral-600">{itemCount}</span>
-                <ChevronDown
-                  className={`h-3.5 w-3.5 text-neutral-600 transition-transform ${
-                    isOpen ? "" : "-rotate-90"
-                  }`}
-                />
-              </button>
-
-              {/* Items */}
-              {isOpen && (
-                <div className="ml-3 flex flex-col gap-0.5 border-l border-neutral-800/60 py-1 pl-3">
-                  {category.items.map((item) => {
-                    const isActive = activeSlug === item.slug;
+        ) : (
+          <>
+            {/* ── Guide links ── */}
+            {guideLinks.length > 0 && (
+              <div className="mb-2">
+                <div className="flex flex-col gap-0.5">
+                  {guideLinks.map((link) => {
+                    const isActive = activeSlug === link.slug;
                     return (
                       <Link
-                        key={item.slug}
-                        href={`/docs/${item.slug}`}
-                        className={`flex items-center gap-2 rounded-md px-2 py-1.5 text-sm transition-colors ${
+                        key={link.slug}
+                        href={`/docs/${link.slug}`}
+                        className={`flex items-center gap-2 rounded-md px-2 py-2 text-sm transition-colors ${
                           isActive
                             ? "bg-white/[0.06] text-white"
-                            : "text-neutral-500 hover:text-neutral-200"
+                            : "text-neutral-400 hover:bg-neutral-800/30 hover:text-white"
                         }`}
                       >
-                        <span className="truncate">{item.name}</span>
-                        {item.isNew && (
-                          <span className="rounded bg-emerald-500/20 px-1.5 py-0.5 text-[10px] font-medium text-emerald-400">
-                            NEW
-                          </span>
-                        )}
+                        <span className="truncate">{link.name}</span>
                       </Link>
                     );
                   })}
                 </div>
-              )}
-            </div>
-          );
-        })}
+
+                {/* Separator */}
+                <div className="my-3 border-t border-neutral-800/60" />
+              </div>
+            )}
+
+            {/* Section title */}
+            <p className="px-2 pb-2 text-xs font-medium tracking-wider text-neutral-500 uppercase">
+              Components
+            </p>
+
+            {/* ── Component categories ── */}
+            {categories.map((category) => {
+              const isOpen = openSections[category.title] ?? false;
+              const itemCount = category.items.length;
+
+              return (
+                <div key={category.title}>
+                  {/* Category header */}
+                  <button
+                    onClick={() => toggle(category.title)}
+                    aria-expanded={isOpen}
+                    className="flex w-full cursor-pointer items-center gap-2 rounded-md px-2 py-2 text-sm text-neutral-400 transition-colors hover:bg-neutral-800/30 hover:text-white"
+                  >
+                    <span className="flex h-4 w-4 items-center justify-center text-neutral-500">
+                      {category.icon}
+                    </span>
+                    <span className="flex-1 text-left">{category.title}</span>
+                    <span className="text-xs text-neutral-600">
+                      {itemCount}
+                    </span>
+                    <ChevronDown
+                      className={`h-3.5 w-3.5 text-neutral-600 transition-transform ${
+                        isOpen ? "" : "-rotate-90"
+                      }`}
+                    />
+                  </button>
+
+                  {/* Items */}
+                  {isOpen && (
+                    <div className="ml-3 flex flex-col gap-0.5 border-l border-neutral-800/60 py-1 pl-3">
+                      {category.items.map((item) => {
+                        const isActive = activeSlug === item.slug;
+                        return (
+                          <Link
+                            key={item.slug}
+                            href={`/docs/${item.slug}`}
+                            className={`flex items-center gap-2 rounded-md px-2 py-1.5 text-sm transition-colors ${
+                              isActive
+                                ? "bg-white/[0.06] text-white"
+                                : "text-neutral-500 hover:text-neutral-200"
+                            }`}
+                          >
+                            <span className="truncate">{item.name}</span>
+                            {item.isNew && (
+                              <span className="rounded bg-emerald-500/20 px-1.5 py-0.5 text-[10px] font-medium text-emerald-400">
+                                NEW
+                              </span>
+                            )}
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </>
+        )}
       </nav>
 
       {/* Footer */}
