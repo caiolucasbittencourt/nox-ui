@@ -9,7 +9,7 @@ function FloatingNavbarDemo() {
       {["Home", "About", "Blog", "Contact"].map((item) => (
         <button
           key={item}
-          className="rounded-full px-4 py-1.5 text-xs font-medium text-neutral-400 transition-colors hover:bg-white/[0.06] hover:text-white"
+          className="rounded-full px-4 py-1.5 text-xs font-medium text-neutral-400 transition-colors hover:bg-white/6 hover:text-white"
         >
           {item}
         </button>
@@ -18,22 +18,38 @@ function FloatingNavbarDemo() {
   );
 }
 
-const code = `export function FloatingNav() {
+const code = `interface NavLink {
+  label: string;
+  href: string;
+}
+
+interface FloatingNavbarProps {
+  links: NavLink[];
+  className?: string;
+}
+
+export function FloatingNavbar({
+  links,
+  className = "",
+}: FloatingNavbarProps) {
   return (
-    <div className="inline-flex items-center gap-1 
-      rounded-full border border-neutral-800 
-      bg-neutral-900/80 px-1 py-1 backdrop-blur-sm">
-      {["Home", "About", "Blog", "Contact"].map((item) => (
-        <button
-          key={item}
-          className="rounded-full px-4 py-1.5 text-xs 
-            font-medium text-neutral-400 transition-colors 
-            hover:bg-white/[0.06] hover:text-white"
+    <nav
+      className={\`inline-flex items-center gap-1
+        rounded-full border border-neutral-800
+        bg-neutral-900/80 px-1 py-1 backdrop-blur-sm \${className}\`}
+    >
+      {links.map((link) => (
+        <a
+          key={link.href}
+          href={link.href}
+          className="rounded-full px-4 py-1.5 text-xs
+            font-medium text-neutral-400 transition-colors
+            hover:bg-white/6 hover:text-white"
         >
-          {item}
-        </button>
+          {link.label}
+        </a>
       ))}
-    </div>
+    </nav>
   );
 }`;
 
@@ -44,13 +60,26 @@ export const floatingNavbar: ComponentEntry = {
     "Floating navigation bar with pill shape and background blur effect.",
   demo: <FloatingNavbarDemo />,
   code,
-  props: [],
+  props: [
+    {
+      name: "links",
+      type: "NavLink[]",
+      description: "Array of navigation links with label and href.",
+      required: true,
+    },
+    {
+      name: "className",
+      type: "string",
+      description: "Additional CSS classes.",
+    },
+  ],
   dependencies: [],
   usage: `import { FloatingNavbar } from "@/components/ui/floating-navbar";
 
 const links = [
   { label: "Home", href: "/" },
   { label: "About", href: "/about" },
+  { label: "Blog", href: "/blog" },
   { label: "Contact", href: "/contact" },
 ];
 

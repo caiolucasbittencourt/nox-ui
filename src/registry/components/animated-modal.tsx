@@ -88,39 +88,82 @@ function AnimatedModalDemo() {
   );
 }
 
-const code = `export function AnimatedModal() {
-  const [open, setOpen] = useState(false);
+const code = `import { useEffect, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { X } from "lucide-react";
+
+interface AnimatedModalProps {
+  children: React.ReactNode;
+  open: boolean;
+  onClose: () => void;
+  title?: string;
+  className?: string;
+  overlayClassName?: string;
+  closeOnOverlay?: boolean;
+}
+
+export function AnimatedModal({
+  children,
+  open,
+  onClose,
+  title,
+  className = "",
+  overlayClassName = "",
+  closeOnOverlay = true,
+}: AnimatedModalProps) {
+  // Close on Escape key
+  useEffect(() => {
+    if (!open) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [open, onClose]);
+
   return (
-    <>
-      <button onClick={() => setOpen(true)}
-        className="rounded-lg border border-neutral-800 
-          bg-neutral-900 px-5 py-2.5 text-sm font-medium 
-          text-neutral-300 transition-all 
-          hover:border-neutral-600 hover:text-white">
-        Open Modal
-      </button>
-      <AnimatePresence>
-        {open && (
+    <AnimatePresence>
+      {open && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
+          className={\`fixed inset-0 z-50 flex items-center
+            justify-center bg-black/60 backdrop-blur-sm \${overlayClassName}\`}
+          onClick={closeOnOverlay ? onClose : undefined}
+          role="dialog"
+          aria-modal="true"
+        >
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            className="fixed inset-0 z-50 flex items-center 
-              justify-center bg-black/60 backdrop-blur-sm"
-            onClick={() => setOpen(false)}>
-            <div className="rounded-xl bg-neutral-900 
-              border border-neutral-800 p-8 max-w-sm w-full">
-              <h3 className="text-lg font-semibold text-white">
-                Modal Title
-              </h3>
-              <p className="mt-2 text-sm text-neutral-400">
-                Content goes here.
-              </p>
-            </div>
+            initial={{ opacity: 0, scale: 0.95, y: 8 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 8 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
+            onClick={(e) => e.stopPropagation()}
+            className={\`w-full max-w-sm rounded-xl border
+              border-neutral-800/60 bg-neutral-950 p-6 \${className}\`}
+          >
+            {title && (
+              <div className="mb-4 flex items-center justify-between">
+                <h3 className="text-base font-semibold text-white">
+                  {title}
+                </h3>
+                <button
+                  onClick={onClose}
+                  aria-label="Close modal"
+                  className="text-neutral-600 transition-colors
+                    hover:text-neutral-300"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              </div>
+            )}
+            {children}
           </motion.div>
-        )}
-      </AnimatePresence>
-    </>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }`;
 
