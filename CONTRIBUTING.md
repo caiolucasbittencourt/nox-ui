@@ -30,7 +30,7 @@ By participating in this project, you agree to maintain a respectful and inclusi
 1. Fork the repository
 2. Clone your fork:
    ```bash
-   git clone https://github.com/caiolucasbittencourt/nox-ui.git
+   git clone https://github.com/YOUR-USERNAME/nox-ui.git
    cd nox-ui
    ```
 3. Install dependencies:
