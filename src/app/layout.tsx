@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Nox UI - Copy, Paste & Ship Fast",
   description:
-    "A copy-and-paste UI component library focused on dark mode, glow effects, and high performance.",
+    "A copy-and-paste UI component collection focused on dark mode, glow effects, and high performance.",
 };
 
 export default function RootLayout({

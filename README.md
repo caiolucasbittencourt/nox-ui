@@ -1,6 +1,6 @@
 # Nox UI
 
-A copy-and-paste UI component library for React. Built with Tailwind CSS and Framer Motion, focused on dark mode and modern aesthetics.
+A copy-and-paste UI component collection for React. Built with Tailwind CSS and Framer Motion, focused on dark mode and modern aesthetics.
 
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![React](https://img.shields.io/badge/React-19+-61DAFB?logo=react&logoColor=white)](https://react.dev)
